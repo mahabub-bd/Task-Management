@@ -9,7 +9,7 @@ export default function TaskBoard() {
     title: "Learn React Native",
     description:
       "I want to Learn React such thanI can treat it like my slave and make it do whatever I want to do.",
-    tags: ["web", "react", "js"],
+    tags: ["Web", "React", "Angular"],
     priority: "High",
     isFavorite: true,
   };
