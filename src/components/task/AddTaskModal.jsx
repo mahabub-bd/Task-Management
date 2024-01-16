@@ -1,9 +1,32 @@
-export default function AddTaskModal() {
+import { useState } from "react";
+
+export default function AddTaskModal({ onSave, taskToUpdate }) {
+  const [newTask, setNewTask] = useState(
+    taskToUpdate || {
+      id: crypto.randomUUID(),
+      title: "",
+      description: "",
+      tags: [],
+      priority: "",
+      isFavorite: false,
+    }
+  );
+
+  const [isAdd, setIsAdd] = useState(Object.is(taskToUpdate, null));
+
+  const handleChange = (event) => {
+    const name = event.target.name;
+    const value =
+      name === "tags" ? event.target.value.split(",") : event.target.value;
+
+    setNewTask({ ...newTask, [name]: value });
+  };
+
   return (
     <div className="bg-black bg-opacity-70 h-full w-full z-10 absolute top-0 left-0">
       <form className="mx-auto my-10 w-full max-w-[740px] rounded-xl border border-[#FEFBFB]/[36%] bg-[#191D26] p-9 max-md:px-4 lg:my-20 lg:p-11 z-10 absolute top-1/4 left-1/3">
         <h2 className="mb-9 text-center text-2xl font-bold text-white lg:mb-11 lg:text-[28px]">
-          Add New Task
+          {isAdd ? "Add New Task" : "Edit Task"}
         </h2>
 
         {/* <!-- inputs --> */}
@@ -15,6 +38,8 @@ export default function AddTaskModal() {
               className="block w-full rounded-md bg-[#2D323F] px-3 py-2.5"
               type="text"
               name="title"
+              value={newTask.title}
+              onChange={handleChange}
               id="title"
               required
             />
@@ -23,9 +48,11 @@ export default function AddTaskModal() {
           <div className="space-y-2 lg:space-y-3">
             <label htmlFor="description">Description</label>
             <textarea
-              className="block min-h-[120px] w-full rounded-md bg-[#2D323F] px-3 py-2.5 lg:min-h-[180px]"
+              className="block min-h-[80px] w-full rounded-md bg-[#2D323F] px-3 py-2.5 lg:min-h-[180px]"
               type="text"
               name="description"
+              value={newTask.description}
+              onChange={handleChange}
               id="description"
               required
             ></textarea>
@@ -39,6 +66,8 @@ export default function AddTaskModal() {
                 className="block w-full rounded-md bg-[#2D323F] px-3 py-2.5"
                 type="text"
                 name="tags"
+                value={newTask.tags}
+                onChange={handleChange}
                 id="tags"
                 required
               />
@@ -49,6 +78,8 @@ export default function AddTaskModal() {
               <select
                 className="block w-full cursor-pointer rounded-md bg-[#2D323F] px-3 py-2.5"
                 name="priority"
+                value={newTask.priority}
+                onChange={handleChange}
                 id="priority"
                 required
               >
@@ -65,8 +96,9 @@ export default function AddTaskModal() {
           <button
             type="submit"
             className="rounded bg-blue-600 px-4 py-2 text-white transition-all hover:opacity-80"
+            onClick={() => onSave(newTask, isAdd)}
           >
-            Create new Task
+            Save
           </button>
         </div>
       </form>
