@@ -5,15 +5,15 @@ import TaskBoard from "./components/task/TaskBoard";
 
 function App() {
   return (
-    <>
+    <div className="font-inter">
       <Header />
-      <div className="flex flex-col  justify-center items-center">
+      <div className="flex flex-col justify-center items-center">
         <HeroSection />
         <TaskBoard />
       </div>
 
       <Footer />
-    </>
+    </div>
   );
 }
 
