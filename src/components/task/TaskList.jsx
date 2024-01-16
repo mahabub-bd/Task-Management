@@ -1,31 +1,30 @@
 import { FaStar } from "react-icons/fa";
 
-export default function TaskList({ tasks, onEdit }) {
+export default function TaskList({ tasks, onEdit, onDelete, onFav }) {
   return (
     <div className="overflow-auto">
       <table className="table-fixed overflow-auto xl:w-full">
         <thead>
           <tr>
-            <th className="p-4 pb-8 text-sm font-semibold capitalize w-[48px]"></th>
-            <th className="p-4 pb-8 text-sm font-semibold capitalize w-[300px]">
-              {" "}
-              Title{" "}
+            <th className="p-4 pb-8 text-left text-sm font-semibold capitalize w-[48px]"></th>
+            <th className="p-4 pb-8 text-sm text-left font-semibold capitalize w-[300px]">
+              Title
             </th>
-            <th className="p-4 pb-8 text-sm font-semibold capitalize w-full">
+            <th className="p-4 pb-8 text-left text-sm font-semibold capitalize w-[300px]">
+              Date
+            </th>
+            <th className="p-4 pb-8 text-sm text-left font-semibold capitalize w-full">
               {" "}
               Description{" "}
             </th>
-            <th className="p-4 pb-8 text-sm font-semibold capitalize md:w-[350px]">
-              {" "}
-              Tags{" "}
+            <th className="p-4 pb-8 text-sm  font-semibold capitalize md:w-[350px]">
+              Tags
             </th>
             <th className="p-4 pb-8 text-sm font-semibold capitalize md:w-[100px]">
-              {" "}
-              Priority{" "}
+              Priority
             </th>
             <th className="p-4 pb-8 text-sm font-semibold capitalize md:w-[100px]">
-              {" "}
-              Options{" "}
+              Options
             </th>
           </tr>
         </thead>
@@ -45,6 +44,7 @@ export default function TaskList({ tasks, onEdit }) {
                 </button>
               </td>
               <td>{task.title}</td>
+              <td>{task.date}</td>
               <td>
                 <div>{task.description}</div>
               </td>
@@ -62,7 +62,12 @@ export default function TaskList({ tasks, onEdit }) {
               <td className="text-center">{task.priority}</td>
               <td>
                 <div className="flex items-center justify-center space-x-3">
-                  <button className="text-red-500">Delete</button>
+                  <button
+                    onClick={() => onDelete(task.id)}
+                    className="text-red-500"
+                  >
+                    Delete
+                  </button>
                   <button
                     onClick={() => onEdit(task)}
                     className="text-blue-500"
