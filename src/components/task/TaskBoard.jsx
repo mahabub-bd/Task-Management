@@ -1,8 +1,9 @@
 import { useState } from "react";
+
 import AddTaskModal from "./AddTaskModal";
-import NoTasksFound from "./NoTaskFound";
+import NoTasksFound from "./NoTasksFound";
 import SearchTask from "./SearchTask";
-import TaskAction from "./TaskAction";
+import TaskActions from "./TaskAction";
 import TaskList from "./TaskList";
 
 export default function TaskBoard() {
@@ -11,12 +12,10 @@ export default function TaskBoard() {
     title: "Learn React Native",
     description:
       "I want to Learn React such thanI can treat it like my slave and make it do whatever I want to do.",
-    tags: ["Web", "React", "Angular"],
+    tags: ["web", "react", "js"],
     priority: "High",
     isFavorite: true,
-    date: new Date().toISOString().split("T")[0],
   };
-
   const [tasks, setTasks] = useState([defaultTask]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [taskToUpdate, setTaskToUpdate] = useState(null);
@@ -34,18 +33,19 @@ export default function TaskBoard() {
     setShowAddModal(false);
   }
 
-  function handleEditTask(editTask) {
-    setTaskToUpdate(editTask);
+  function handleEditTask(task) {
+    setTaskToUpdate(task);
     setShowAddModal(true);
   }
 
   function handleDeleteTask(taskId) {
-    const taskAfterDelete = tasks.filter((task) => task.id !== taskId);
-    setTasks(taskAfterDelete);
+    const tasksAfterDelete = tasks.filter((task) => task.id !== taskId);
+    setTasks(tasksAfterDelete);
   }
 
   function handleDeleteAllClick() {
-    setTasks([]);
+    tasks.length = 0;
+    setTasks([...tasks]);
   }
 
   function handleFavorite(taskId) {
@@ -55,17 +55,19 @@ export default function TaskBoard() {
     setTasks(favStatusChange);
   }
 
-  function handleClosedModal() {
-    setShowAddModal(false);
-    setTaskToUpdate(null);
-  }
-
   function handleSearch(searchTerm) {
-    const searchTask = tasks.filter((task) =>
+    console.log(searchTerm);
+
+    const filtered = tasks.filter((task) =>
       task.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    setTasks(...searchTask);
+    setTasks([...filtered]);
+  }
+
+  function handleCloseClick() {
+    setShowAddModal(false);
+    setTaskToUpdate(null);
   }
 
   return (
@@ -73,20 +75,21 @@ export default function TaskBoard() {
       {showAddModal && (
         <AddTaskModal
           onSave={handleAddEditTask}
+          onCloseClick={handleCloseClick}
           taskToUpdate={taskToUpdate}
-          onCloseClick={handleClosedModal}
         />
       )}
       <div className="container">
-        <SearchTask onSearch={handleSearch} />
+        <div className="p-2 flex justify-end">
+          <SearchTask onSearch={handleSearch} />
+        </div>
+
         <div className="rounded-xl border border-[rgba(206,206,206,0.12)] bg-[#1D212B] px-6 py-8 md:px-9 md:py-16">
-          <TaskAction
+          <TaskActions
             onAddClick={() => setShowAddModal(true)}
             onDeleteAllClick={handleDeleteAllClick}
           />
-
           {tasks.length > 0 ? (
-            // Render TaskList component when tasks.length > 0
             <TaskList
               tasks={tasks}
               onEdit={handleEditTask}
@@ -94,7 +97,6 @@ export default function TaskBoard() {
               onFav={handleFavorite}
             />
           ) : (
-            // Render NoTasksFound component when tasks.length === 0
             <NoTasksFound />
           )}
         </div>
